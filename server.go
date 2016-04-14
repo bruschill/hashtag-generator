@@ -4,17 +4,16 @@ import (
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/engine/standard"
 	"github.com/labstack/echo/middleware"
-	"net/http"
 )
 
-func main() {
+func createMux() *echo.Echo {
 	e := echo.New()
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
-	e.Get("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, world!")
-	})
+	return e
+}
 
+func main() {
 	e.Run(standard.New(":9000"))
 }
