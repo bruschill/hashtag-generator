@@ -7,14 +7,9 @@ import (
 )
 
 func hello(c echo.Context) error {
-	return c.String(http.StatusOK, "Hello, world!")
-}
-
-func secret(c echo.Context) error {
-	return c.String(http.StatusOK, "SECRET PAGE")
+	return c.Render(http.StatusOK, "hello", "World")
 }
 
 func init() {
 	e.Get("/", hello)
-	e.Get("/secret", secret)
 }
