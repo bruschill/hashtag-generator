@@ -7,6 +7,8 @@ import (
 	"github.com/labstack/echo/engine/standard"
 )
 
+import _ "github.com/joho/godotenv/autoload"
+
 var e = createMux()
 
 func main() {
