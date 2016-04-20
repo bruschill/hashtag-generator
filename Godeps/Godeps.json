@@ -5,23 +5,23 @@
 	"Deps": [
 		{
 			"ImportPath": "github.com/labstack/echo",
-			"Comment": "v2.0.0-beta.2-52-g11eafe9",
-			"Rev": "11eafe9b901c7598ddbac94294120e5c695941f1"
+			"Comment": "v2.0.0-beta.2-60-g1d47a6c",
+			"Rev": "1d47a6cd30085f81c92900d23eb8cde357f64267"
 		},
 		{
 			"ImportPath": "github.com/labstack/echo/engine",
-			"Comment": "v2.0.0-beta.2-52-g11eafe9",
-			"Rev": "11eafe9b901c7598ddbac94294120e5c695941f1"
+			"Comment": "v2.0.0-beta.2-60-g1d47a6c",
+			"Rev": "1d47a6cd30085f81c92900d23eb8cde357f64267"
 		},
 		{
 			"ImportPath": "github.com/labstack/echo/engine/standard",
-			"Comment": "v2.0.0-beta.2-52-g11eafe9",
-			"Rev": "11eafe9b901c7598ddbac94294120e5c695941f1"
+			"Comment": "v2.0.0-beta.2-60-g1d47a6c",
+			"Rev": "1d47a6cd30085f81c92900d23eb8cde357f64267"
 		},
 		{
 			"ImportPath": "github.com/labstack/echo/middleware",
-			"Comment": "v2.0.0-beta.2-52-g11eafe9",
-			"Rev": "11eafe9b901c7598ddbac94294120e5c695941f1"
+			"Comment": "v2.0.0-beta.2-60-g1d47a6c",
+			"Rev": "1d47a6cd30085f81c92900d23eb8cde357f64267"
 		},
 		{
 			"ImportPath": "github.com/labstack/gommon/color",

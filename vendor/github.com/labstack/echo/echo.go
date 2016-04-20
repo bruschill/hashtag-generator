@@ -27,7 +27,7 @@ Example:
 	    e.Use(middleware.Recover())
 
 	    // Routes
-	    e.Get("/", hello)
+	    e.GET("/", hello)
 
 	    // Start server
 	    e.Run(standard.New(":1323"))
@@ -78,7 +78,7 @@ type (
 		Handler string
 	}
 
-	// HTTPError represents an error that occured while handling a request.
+	// HTTPError represents an error that occurred while handling a request.
 	HTTPError struct {
 		Code    int
 		Message string
@@ -164,6 +164,7 @@ const (
 	HeaderWWWAuthenticate               = "WWW-Authenticate"
 	HeaderXForwardedFor                 = "X-Forwarded-For"
 	HeaderXRealIP                       = "X-Real-IP"
+	HeaderServer                        = "Server"
 	HeaderOrigin                        = "Origin"
 	HeaderAccessControlRequestMethod    = "Access-Control-Request-Method"
 	HeaderAccessControlRequestHeaders   = "Access-Control-Request-Headers"
@@ -214,7 +215,7 @@ var (
 func New() (e *Echo) {
 	e = &Echo{maxParam: new(int)}
 	e.pool.New = func() interface{} {
-		return NewContext(nil, nil, e)
+		return e.NewContext(nil, nil)
 	}
 	e.router = NewRouter(e)
 
@@ -225,6 +226,18 @@ func New() (e *Echo) {
 	e.logger.SetLevel(log.ERROR)
 
 	return
+}
+
+// NewContext returns a Context instance.
+func (e *Echo) NewContext(rq engine.Request, rs engine.Response) Context {
+	return &context{
+		request:  rq,
+		response: rs,
+		echo:     e,
+		pvalues:  make([]string, *e.maxParam),
+		store:    make(store),
+		handler:  notFoundHandler,
+	}
 }
 
 // Router returns router.
@@ -305,8 +318,13 @@ func (e *Echo) Use(middleware ...MiddlewareFunc) {
 	e.middleware = append(e.middleware, middleware...)
 }
 
-// Connect registers a new CONNECT route for a path with matching handler in the
+// CONNECT registers a new CONNECT route for a path with matching handler in the
 // router with optional route-level middleware.
+func (e *Echo) CONNECT(path string, h HandlerFunc, m ...MiddlewareFunc) {
+	e.add(CONNECT, path, h, m...)
+}
+
+// Connect is deprecated, use `CONNECT()` instead.
 func (e *Echo) Connect(path string, h HandlerFunc, m ...MiddlewareFunc) {
 	e.add(CONNECT, path, h, m...)
 }
@@ -317,44 +335,79 @@ func (e *Echo) Delete(path string, h HandlerFunc, m ...MiddlewareFunc) {
 	e.add(DELETE, path, h, m...)
 }
 
-// Get registers a new GET route for a path with matching handler in the router
+// GET registers a new GET route for a path with matching handler in the router
 // with optional route-level middleware.
+func (e *Echo) GET(path string, h HandlerFunc, m ...MiddlewareFunc) {
+	e.add(GET, path, h, m...)
+}
+
+// Get is deprecated, use `GET()` instead.
 func (e *Echo) Get(path string, h HandlerFunc, m ...MiddlewareFunc) {
 	e.add(GET, path, h, m...)
 }
 
-// Head registers a new HEAD route for a path with matching handler in the
+// HEAD registers a new HEAD route for a path with matching handler in the
 // router with optional route-level middleware.
+func (e *Echo) HEAD(path string, h HandlerFunc, m ...MiddlewareFunc) {
+	e.add(HEAD, path, h, m...)
+}
+
+// Head is deprecated, use `HEAD()` instead.
 func (e *Echo) Head(path string, h HandlerFunc, m ...MiddlewareFunc) {
 	e.add(HEAD, path, h, m...)
 }
 
-// Options registers a new OPTIONS route for a path with matching handler in the
+// OPTIONS registers a new OPTIONS route for a path with matching handler in the
 // router with optional route-level middleware.
+func (e *Echo) OPTIONS(path string, h HandlerFunc, m ...MiddlewareFunc) {
+	e.add(OPTIONS, path, h, m...)
+}
+
+// Options is deprecated, use `OPTIONS()` instead.
 func (e *Echo) Options(path string, h HandlerFunc, m ...MiddlewareFunc) {
 	e.add(OPTIONS, path, h, m...)
 }
 
-// Patch registers a new PATCH route for a path with matching handler in the
+// PATCH registers a new PATCH route for a path with matching handler in the
 // router with optional route-level middleware.
+func (e *Echo) PATCH(path string, h HandlerFunc, m ...MiddlewareFunc) {
+	e.add(PATCH, path, h, m...)
+}
+
+// Patch is deprecated, use `PATCH()` instead.
 func (e *Echo) Patch(path string, h HandlerFunc, m ...MiddlewareFunc) {
 	e.add(PATCH, path, h, m...)
 }
 
-// Post registers a new POST route for a path with matching handler in the
+// POST registers a new POST route for a path with matching handler in the
 // router with optional route-level middleware.
+func (e *Echo) POST(path string, h HandlerFunc, m ...MiddlewareFunc) {
+	e.add(POST, path, h, m...)
+}
+
+// Post is deprecated, use `POST()` instead.
 func (e *Echo) Post(path string, h HandlerFunc, m ...MiddlewareFunc) {
 	e.add(POST, path, h, m...)
 }
 
-// Put registers a new PUT route for a path with matching handler in the
+// PUT registers a new PUT route for a path with matching handler in the
 // router with optional route-level middleware.
+func (e *Echo) PUT(path string, h HandlerFunc, m ...MiddlewareFunc) {
+	e.add(PUT, path, h, m...)
+}
+
+// Put is deprecated, use `PUT()` instead.
 func (e *Echo) Put(path string, h HandlerFunc, m ...MiddlewareFunc) {
 	e.add(PUT, path, h, m...)
 }
 
-// Trace registers a new TRACE route for a path with matching handler in the
+// TRACE registers a new TRACE route for a path with matching handler in the
 // router with optional route-level middleware.
+func (e *Echo) TRACE(path string, h HandlerFunc, m ...MiddlewareFunc) {
+	e.add(TRACE, path, h, m...)
+}
+
+// Trace is deprecated, use `TRACE()` instead.
 func (e *Echo) Trace(path string, h HandlerFunc, m ...MiddlewareFunc) {
 	e.add(TRACE, path, h, m...)
 }
@@ -378,14 +431,14 @@ func (e *Echo) Match(methods []string, path string, handler HandlerFunc, middlew
 // Static registers a new route with path prefix to serve static files from the
 // provided root directory.
 func (e *Echo) Static(prefix, root string) {
-	e.Get(prefix+"*", func(c Context) error {
+	e.GET(prefix+"*", func(c Context) error {
 		return c.File(path.Join(root, c.P(0)))
 	})
 }
 
 // File registers a new route with path to serve a static file.
 func (e *Echo) File(path, file string) {
-	e.Get(path, func(c Context) error {
+	e.GET(path, func(c Context) error {
 		return c.File(file)
 	})
 }
