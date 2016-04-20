@@ -152,3 +152,7 @@ footer {
 #brandon { color: #f38181; }
 
 #hunter { color: #95E1D3; }
+
+.gh-link {
+  text-decoration: none;
+}
