@@ -7,5 +7,5 @@
 ### Using the app
 - From the root of the project directory:
   - `go build`
-  - `./hashtag-generator`
+  - `PORT=9000 ./hashtag-generator`
 - visit `localhost:9000` in your browser

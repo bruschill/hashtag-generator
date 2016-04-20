@@ -3,17 +3,19 @@ package main
 import (
 	"html/template"
 	"io"
+	"log"
+	"os"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/engine/standard"
 	"github.com/labstack/echo/middleware"
 )
 
-type Template struct {
+type tmpl struct {
 	templates *template.Template
 }
 
-func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
+func (t *tmpl) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
 	return t.templates.ExecuteTemplate(w, name, data)
 }
 
@@ -22,7 +24,7 @@ func createMux() *echo.Echo {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
-	t := &Template{
+	t := &tmpl{
 		templates: template.Must(template.ParseGlob("public/views/*.html")),
 	}
 
@@ -32,5 +34,11 @@ func createMux() *echo.Echo {
 }
 
 func main() {
-	e.Run(standard.New(":9000"))
+	port := os.Getenv("PORT")
+
+	if port == "" {
+		log.Fatal("$PORT must be defined")
+	}
+
+	e.Run(standard.New(":" + port))
 }
