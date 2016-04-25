@@ -1,5 +1,5 @@
 package main
 
 func init() {
-	e.File("/", "public/index.html")
+	app.File("/", "public/index.html")
 }

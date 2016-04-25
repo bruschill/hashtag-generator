@@ -9,7 +9,7 @@ import (
 
 import _ "github.com/joho/godotenv/autoload"
 
-var e = createMux()
+var app = createMux()
 
 func main() {
 	port := os.Getenv("PORT")
@@ -18,5 +18,5 @@ func main() {
 		log.Fatal("$PORT must be defined")
 	}
 
-	e.Run(standard.New(":" + port))
+	app.Run(standard.New(":" + port))
 }

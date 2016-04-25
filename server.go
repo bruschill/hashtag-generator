@@ -6,9 +6,9 @@ import (
 )
 
 func createMux() *echo.Echo {
-	e := echo.New()
-	e.Use(middleware.Logger())
-	e.Use(middleware.Recover())
+	app := echo.New()
+	app.Use(middleware.Logger())
+	app.Use(middleware.Recover())
 
-	return e
+	return app
 }
