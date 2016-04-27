@@ -46,7 +46,7 @@ h2 {
 }
 
 .wrapper--generator {
-  background: #f38181 url('/img/background.png');
+  background: #f38181 url('/img/background.png') fixed;
   background-size: cover;
 }
 
@@ -61,7 +61,7 @@ h2 {
   margin: 2.4rem 0;
 }
 
-.input-wrapper {
+#input-wrapper {
   margin-top: 9.6rem;
 }
 
@@ -156,3 +156,15 @@ footer {
 .gh-link {
   text-decoration: none;
 }
+
+/* container div that replaces input-wrapper. */
+/* contains #hashtag and #try-again-link as children. */
+#hashtag-container {
+  margin-top: 9.6rem;
+}
+
+/* element responsible for displaying the actual hashtag */
+#hashtag { }
+
+/* element that contains the link to generate another hashtag */
+#try-again-btn { }
