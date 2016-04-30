@@ -9,9 +9,10 @@
     }, 500);
   }
 
-  function convertStringToHashtag(textToConvert) {
+  function generateHashtag() {
     //make sure textToConvert is a non-empty string
-    if(!!textToConvert) {
+    if(!!$('#user-input')) {
+      textToConvert = $('#user-input').val();
       var splitTextToConvert, capitalCamelCasedString;
       var capitalizedWords = [];
 
@@ -37,21 +38,19 @@
     }
   }
 
-  function renderHashtagDisplay(generatedHashtag) {
+  function renderHashtagDisplay() {
     //if hashtagDisplay is undefined or null, build it
-    if(typeof hashtagDisplay === 'undefined' || !hashtagDisplay) {
-      //creating elements that are part of the hashtag display
-      var hashtagContainer = $($.parseHTML("<div id='hashtag-container'></div>"));
-      var hashtagElement = $($.parseHTML("<h3 id='hashtag'>" + generatedHashtag + "</h3>"));
+    //creating elements that are part of the hashtag display
+    var hashtagContainer = $($.parseHTML("<div id='hashtag-container'></div>"));
+    var hashtagElement = $($.parseHTML("<h3 id='hashtag'>" + generateHashtag() + "</h3>"));
 
-      var tryAgainButton = $($.parseHTML("<input type='submit' value='Try again?' id='try-again-btn' class='btn'>"));
-      tryAgainButton.click(function() {
-        flashScreen();
-        renderGeneratorDisplay();
-      });
+    var tryAgainButton = $($.parseHTML("<input type='submit' value='Try again?' id='try-again-btn' class='btn'>"));
+    tryAgainButton.click(function() {
+      flashScreen();
+      renderGeneratorDisplay();
+    });
 
-      hashtagDisplay = hashtagContainer.append(hashtagElement, tryAgainButton);
-    }
+    hashtagDisplay = hashtagContainer.append(hashtagElement, tryAgainButton);
 
     //remove input-wrapper from dom, but keep events that were previously bound to it or its children
     generatorDisplay = $('#input-wrapper').detach();
@@ -60,32 +59,31 @@
   }
 
   function renderGeneratorDisplay() {
-    //if generatorDisplay is undefined or null, build it
-    if(typeof generatorDisplay === 'undefined' || !generatorDisplay) {
-      //creating elements that are part of the generator display
-      var generatorContainer = $($.parseHTML("<div id='input-wrapper'></div>"));
-      var userInput = $($.parseHTML("<input type='text' placeholder='Enter some words' id='user-input'>"));
-      var generateButton = $($.parseHTML("<input type='submit' value='Generate' id='generate-btn' class='btn'>"));
-      generateButton.click(function() {
-        flashScreen();
-        renderHashtagDisplay(convertStringToHashtag($('#user-input').val()));
-      });
-
-      generatorDisplay = generatorContainer.append(userInput, generateButton);
-    }
+    var userInput = generatorDisplay.children('#user-input');
+    userInput.val("");
 
     //remove hashtag-container from dom, but keep events that were previously bound to it or its children
     hashtagDisplay = $('#hashtag-container').detach();
 
     //reset text box contents to empty string before display
-    generatorDisplay.children('#user-input').val("")
     $('body > div.wrapper.wrapper--generator').append(generatorDisplay);
+    userInput.focus();
+  }
+
+  function generateSubmitFn() {
+    flashScreen();
+    renderHashtagDisplay();
   }
 
   $(document).ready(function() {
-    $('#generate-btn').click(function() {
-      flashScreen();
-      renderHashtagDisplay(convertStringToHashtag($('#user-input').val()));
+    $('#user-input').bind("enterKey", generateSubmitFn);
+
+    $('#user-input').keyup(function(e) {
+      if(e.keyCode === 13) {
+        $(this).trigger("enterKey");
+      }
     });
+
+    $('#generate-btn').click(generateSubmitFn);
   });
 })(window);
