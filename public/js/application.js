@@ -48,6 +48,7 @@
     tryAgainButton.click(function() {
       flashScreen();
       renderGeneratorDisplay();
+      $('#confetti').remove();
     });
 
     hashtagDisplay = hashtagContainer.append(hashtagElement, tryAgainButton);
@@ -55,7 +56,7 @@
     //remove input-wrapper from dom, but keep events that were previously bound to it or its children
     generatorDisplay = $('#input-wrapper').detach();
 
-    $('body > div.wrapper.wrapper--generator').append(hashtagDisplay);
+    $('body > div.wrapper > div.wrapper--generator').append(hashtagDisplay);
   }
 
   function renderGeneratorDisplay() {
@@ -66,13 +67,14 @@
     hashtagDisplay = $('#hashtag-container').detach();
 
     //reset text box contents to empty string before display
-    $('body > div.wrapper.wrapper--generator').append(generatorDisplay);
+    $('body > div.wrapper > div.wrapper--generator').append(generatorDisplay);
     userInput.focus();
   }
 
   function generateSubmitFn() {
     flashScreen();
     renderHashtagDisplay();
+    window.confetti.start();
   }
 
   $(document).ready(function() {
