@@ -12,7 +12,8 @@
   function generateHashtag() {
     //make sure textToConvert is a non-empty string
     if(!!$('#user-input')) {
-      textToConvert = $('#user-input').val();
+      var textToConvert = $('#user-input').val();
+
       var splitTextToConvert, capitalCamelCasedString;
       var capitalizedWords = [];
 
@@ -48,7 +49,8 @@
     tryAgainButton.click(function() {
       flashScreen();
       renderGeneratorDisplay();
-      $('#confetti').remove();
+      $('#confetti').hide();
+      window.confetti.stop();
     });
 
     hashtagDisplay = hashtagContainer.append(hashtagElement, tryAgainButton);
@@ -61,7 +63,17 @@
 
   function renderGeneratorDisplay() {
     var userInput = generatorDisplay.children('#user-input');
+
+    //set up bindings on #user-input text box
     userInput.val("");
+    userInput.bind("enterKey", generateSubmitFn);
+    userInput.keyup(function(e) {
+      if(e.keyCode === 13) {
+        $(this).trigger("enterKey");
+      }
+    });
+
+    generatorDisplay.children('#generate-btn').click(generateSubmitFn);
 
     //remove hashtag-container from dom, but keep events that were previously bound to it or its children
     hashtagDisplay = $('#hashtag-container').detach();
@@ -75,6 +87,7 @@
     flashScreen();
     renderHashtagDisplay();
     window.confetti.start();
+    $('#confetti').show();
   }
 
   $(document).ready(function() {
