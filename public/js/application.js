@@ -1,5 +1,5 @@
 (function(window) {
-  var hashtagDisplay, generatorDisplay;
+  var hashtagDisplay, generatorDisplay, confettiTimerID;
 
   function flashScreen() {
     $('body').addClass('fade-out');
@@ -51,6 +51,7 @@
       renderGeneratorDisplay();
       $('#confetti').hide();
       window.confetti.stop();
+      clearTimeout(confettiTimerID);
     });
 
     hashtagDisplay = hashtagContainer.append(hashtagElement, tryAgainButton);
@@ -73,6 +74,7 @@
       }
     });
 
+    clearTimeout(confettiTimerID);
     generatorDisplay.children('#generate-btn').click(generateSubmitFn);
 
     //remove hashtag-container from dom, but keep events that were previously bound to it or its children
@@ -88,6 +90,11 @@
     renderHashtagDisplay();
     window.confetti.start();
     $('#confetti').show();
+
+    confettiTimerID = setTimeout(function() {
+      $('#confetti').hide();
+      window.confetti.stop();
+    }, 4000);
   }
 
   $(document).ready(function() {
