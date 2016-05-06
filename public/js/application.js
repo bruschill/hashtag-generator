@@ -35,59 +35,18 @@
       capitalCamelCasedString = capitalizedWords.join('');
 
       //prepend an octothorpe to capitalCamelCasedString and return it
-      return "#" + capitalCamelCasedString;
+      var finalHashtag = "#" + capitalCamelCasedString;
+
+      $('#hashtag').text(finalHashtag);
     }
   }
 
-  function renderHashtagDisplay() {
-    //if hashtagDisplay is undefined or null, build it
-    //creating elements that are part of the hashtag display
-    var hashtagContainer = $($.parseHTML("<div id='hashtag-container'></div>"));
-    var hashtagElement = $($.parseHTML("<h3 id='hashtag'>" + generateHashtag() + "</h3>"));
+  function showHashtagDisplay() {
+    var hashtagElement = $('#hashtag');
+    var button = $('#main-btn');
 
-    var tryAgainButton = $($.parseHTML("<input type='submit' value='Try again?' id='try-again-btn' class='btn'>"));
-    tryAgainButton.click(function() {
-      flashScreen();
-      renderGeneratorDisplay();
-      $('#confetti').hide();
-      window.confetti.stop();
-      clearTimeout(confettiTimerID);
-    });
-
-    hashtagDisplay = hashtagContainer.append(hashtagElement, tryAgainButton);
-
-    //remove input-wrapper from dom, but keep events that were previously bound to it or its children
-    generatorDisplay = $('#input-wrapper').detach();
-
-    $('body > div.wrapper > div.wrapper--generator').append(hashtagDisplay);
-  }
-
-  function renderGeneratorDisplay() {
-    var userInput = generatorDisplay.children('#user-input');
-
-    //set up bindings on #user-input text box
-    userInput.val("");
-    userInput.bind("enterKey", generateSubmitFn);
-    userInput.keyup(function(e) {
-      if(e.keyCode === 13) {
-        $(this).trigger("enterKey");
-      }
-    });
-
-    clearTimeout(confettiTimerID);
-    generatorDisplay.children('#generate-btn').click(generateSubmitFn);
-
-    //remove hashtag-container from dom, but keep events that were previously bound to it or its children
-    hashtagDisplay = $('#hashtag-container').detach();
-
-    //reset text box contents to empty string before display
-    $('body > div.wrapper > div.wrapper--generator').append(generatorDisplay);
-    userInput.focus();
-  }
-
-  function generateSubmitFn() {
     flashScreen();
-    renderHashtagDisplay();
+
     window.confetti.start();
     $('#confetti').show();
 
@@ -95,17 +54,24 @@
       $('#confetti').hide();
       window.confetti.stop();
     }, 4000);
+
+    if (button.prop('value') == 'Generate') {
+      button.prop('value', 'Try again?');
+      $('#user-input').css('visibility', 'hidden');
+      generateHashtag();
+      hashtagElement.css('visibility', 'visible');
+    } else {
+      $('#confetti').hide();
+      window.confetti.stop();
+      button.prop('value', 'Generate');
+      $('#user-input').css('visibility', 'visible');
+      hashtagElement.css('visibility', 'hidden');
+      $('#user-input').val('');
+      clearTimeout(confettiTimerID);
+    };
   }
 
   $(document).ready(function() {
-    $('#user-input').bind("enterKey", generateSubmitFn);
-
-    $('#user-input').keyup(function(e) {
-      if(e.keyCode === 13) {
-        $(this).trigger("enterKey");
-      }
-    });
-
-    $('#generate-btn').click(generateSubmitFn);
+    $('#main-btn').click(showHashtagDisplay);
   });
 })(window);
