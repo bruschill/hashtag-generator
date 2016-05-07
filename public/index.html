@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Hashtag Generator</title>
     <link rel="stylesheet" href="css/application.css">
+    <link rel="shortcut icon" type="image/png" href="img/favicon.png"/>
     <script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.js"></script>
     <script src="/js/application.js"></script>
@@ -16,13 +17,16 @@
       <canvas id='confetti'></canvas>
 
       <div class="wrapper--generator">
-        <h1>#HashtagGenerator</h1>
-        <p class="subtitle">The easiest way to create a hashtag</p>
+        <div class="inner">
+          <h1>#HashtagGenerator</h1>
+          <p class="subtitle">The easiest way to create a hashtag</p>
 
-        <div id="input-wrapper">
-          <input type="text" placeholder="Enter some words" id="user-input">
-          <input type="submit" value="Generate" id="generate-btn" class="btn">
-        </div>
+          <div class="hashtag-container">
+            <h3 id="hashtag" style="visibility:hidden;">Placeholder</h3>
+            <input type="text" placeholder="Enter some words" id="user-input">
+            <input type="submit" value="Generate" id="main-btn" class="btn">
+          </div>
+      </div>
       </div>
 
       <div class="wrapper--testimonial">
@@ -30,28 +34,28 @@
 
         <div class="quote-lockup">
           <img class="profile-picture" src="/img/brandon.jpg" alt="Brandon" />
-          <div class="quote-box">
+          <div class="quote-box" id="1">
             <p class="quote">“I will never make my hashtags the old-fashioned way again.”</p>
           </div>
         </div>
 
         <div class="quote-lockup">
           <img class="profile-picture" src="/img/hunter.jpg" alt="Hunter" />
-          <div class="quote-box">
+          <div class="quote-box" id="2">
             <p class="quote">“Amazingly simple. Simply amazing."</p>
           </div>
         </div>
 
         <div class="quote-lockup">
           <img class="profile-picture" src="/img/brandon.jpg" alt="Brandon" />
-          <div class="quote-box">
+          <div class="quote-box" id="3">
             <p class="quote">“I will never make my hashtags the old-fashioned way again.”</p>
           </div>
         </div>
 
         <div class="quote-lockup">
           <img class="profile-picture" src="/img/hunter.jpg" alt="Hunter" />
-          <div class="quote-box">
+          <div class="quote-box" id="4">
             <p class="quote">“Amazingly simple. Simply amazing."</p>
           </div>
         </div>

@@ -53,15 +53,26 @@ h2 {
 
 .wrapper--generator {
   padding: 4.8rem;
-  background: #f38181 url('/img/background.png') fixed;
+  background: #f38181 url('/img/generator-background.png') fixed;
   background-size: cover;
+  height: 70vh;
+}
+
+.wrapper--generator img {
+  height: 100px;
 }
 
 .wrapper--testimonial {
   padding: 4.8rem;
-  background: #95e1d3;
+  /*background: #95e1d3;*/
+  /*background-image: linear-gradient(rgba(149, 225, 211, .5), (rgba(149, 225, 211, .5)), url('../img/sayagata-400px.png');*/
+  background-image:
+        linear-gradient(rgba(149, 225, 211, .5), rgba(149, 225, 211, .5)),
+        url('../img/quote-background.png');
   font-family: "Palatino";
   padding-bottom: 100px;
+  z-index: 2;
+  position: relative;
 }
 
 .subtitle {
@@ -117,6 +128,25 @@ input[type=text] {
   border-radius: .5rem;
   position: relative;
   padding: .6rem;
+  visibility: hidden;
+}
+
+.pop-down {
+  animation: popDown 500ms ease-in-out;
+  visibility: visible;
+}
+
+@keyframes popDown {
+
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .quote {
@@ -130,7 +160,7 @@ input[type=text] {
 .quote-box::before {
   content: '';
   position: absolute;
-  left: 46.5%;
+  left: calc(50% - 20px);
   top: -20px;
   width: 0;
   height: 0;
@@ -172,7 +202,9 @@ footer {
 }
 
 /* element responsible for displaying the actual hashtag */
-#hashtag { }
+#hashtag {
+  font-size: 3em;
+}
 
 /* element that contains the link to generate another hashtag */
-#try-again-btn { }
+#main-btn { }

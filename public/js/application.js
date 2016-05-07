@@ -1,3 +1,27 @@
+$(window).scroll(function() {
+  var wScroll = $(this).scrollTop();
+
+  console.log(wScroll);
+
+  $('.inner').css({ 'transform': 'translateY('+ wScroll/8 +'%)' });
+
+  if (wScroll >= 170) {
+    $('#1').addClass('pop-down');
+  }
+
+  if (wScroll >= 440) {
+    $('#2').addClass('pop-down');
+  }
+
+  if (wScroll >= 670) {
+    $('#3').addClass('pop-down');
+  }
+
+  if (wScroll >= 940) {
+    $('#4').addClass('pop-down');
+  }
+});
+
 (function(window) {
   var hashtagDisplay, generatorDisplay, confettiTimerID;
 
