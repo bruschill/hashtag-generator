@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Hashtag Generator</title>
     <link rel="stylesheet" href="css/application.css">
+    <link rel="shortcut icon" type="image/png" href="img/favicon.png"/>
     <script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.js"></script>
     <script src="/js/application.js"></script>
@@ -19,9 +20,10 @@
         <h1>#HashtagGenerator</h1>
         <p class="subtitle">The easiest way to create a hashtag</p>
 
-        <div id="input-wrapper">
+        <div class="hashtag-container">
+          <h3 id="hashtag" style="visibility:hidden;">Placeholder</h3>
           <input type="text" placeholder="Enter some words" id="user-input">
-          <input type="submit" value="Generate" id="generate-btn" class="btn">
+          <input type="submit" value="Generate" id="main-btn" class="btn">
         </div>
       </div>
 
