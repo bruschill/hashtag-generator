@@ -1,3 +1,25 @@
+$(window).scroll(function() {
+  var wScroll = $(this).scrollTop();
+  var genHeight = $('.wrapper--generator').outerHeight();
+
+  //parallax scroll for top section
+  if (wScroll < genHeight) {
+    $('.inner').css({ 'transform': 'translateY('+ wScroll/8 +'%)' });
+  }
+
+  //animate quote boxes in when scroll reaches certain point
+  var scrollPosition = genHeight == 492 ? 220 : 170;
+
+  $('.quote-box').each(function() {
+
+    if (wScroll >= scrollPosition) {
+      $(this).addClass('pop-down');
+    }
+
+    scrollPosition = scrollPosition + 270;
+  });
+});
+
 (function(window) {
   var hashtagDisplay, generatorDisplay, confettiTimerID;
 
@@ -86,6 +108,7 @@
       input.css('visibility', 'visible');
       hashtagElement.css('visibility', 'hidden');
       input.val('');
+      input.focus();
     };
   }
 
