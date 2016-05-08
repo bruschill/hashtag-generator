@@ -20,7 +20,7 @@ body {
   padding: 0;
 }
 
-canvas {
+#confetti {
   pointer-events: none;
   top: 0;
   left: 0;
@@ -42,6 +42,13 @@ h2 {
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
+@keyframes fade {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+#user-input.error { background-color: rgba(255, 0, 0, .3); }
 
 .fade-out {
   animation: flash 1s;
@@ -100,7 +107,7 @@ h2 {
   margin: 0 auto;
 }
 
-input[type=text] {
+#user-input {
   background: rgba(255, 255, 255, .3);
   padding: 1rem;
   border-radius: .5rem;

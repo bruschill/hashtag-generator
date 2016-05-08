@@ -33,10 +33,10 @@ $(window).scroll(function() {
     }, 500);
   }
 
-  function generateHashtag() {
+  function generateHashtag(text) {
     //make sure textToConvert is a non-empty string
-    if(!!$('#user-input')) {
-      var textToConvert = $('#user-input').val();
+    if(text) {
+      var textToConvert = text;
 
       var splitTextToConvert, capitalCamelCasedString;
       var capitalizedWords = [];
@@ -48,7 +48,7 @@ $(window).scroll(function() {
       splitTextToConvert = textToConvert.split(' ');
       //iterate through each element (word), capitalize the first character,
       //then push it on to end of capitalizedWords array
-      for(var i = 0; i < splitTextToConvert.length; i++) {
+      for (var i = 0; i < splitTextToConvert.length; i++) {
         var word = splitTextToConvert[i];
 
         word = word.substr(0, 1).toUpperCase() + word.substring(1).toLowerCase();
@@ -59,77 +59,71 @@ $(window).scroll(function() {
       capitalCamelCasedString = capitalizedWords.join('');
 
       //prepend an octothorpe to capitalCamelCasedString and return it
-      return "#" + capitalCamelCasedString;
+      var finalHashtag = "#" + capitalCamelCasedString;
+      return finalHashtag;
     }
   }
 
-  function renderHashtagDisplay() {
-    //if hashtagDisplay is undefined or null, build it
-    //creating elements that are part of the hashtag display
-    var hashtagContainer = $($.parseHTML("<div id='hashtag-container'></div>"));
-    var hashtagElement = $($.parseHTML("<h3 id='hashtag'>" + generateHashtag() + "</h3>"));
-
-    var tryAgainButton = $($.parseHTML("<input type='submit' value='Try again?' id='try-again-btn' class='btn'>"));
-    tryAgainButton.click(function() {
-      flashScreen();
-      renderGeneratorDisplay();
-      $('#confetti').hide();
-      window.confetti.stop();
-      clearTimeout(confettiTimerID);
-    });
-
-    hashtagDisplay = hashtagContainer.append(hashtagElement, tryAgainButton);
-
-    //remove input-wrapper from dom, but keep events that were previously bound to it or its children
-    generatorDisplay = $('#input-wrapper').detach();
-
-    $('body > div.wrapper > div.wrapper--generator').append(hashtagDisplay);
+  function runAction() {
+    $('#user-input').val() ? showHashtagDisplay() : showError();
   }
 
-  function renderGeneratorDisplay() {
-    var userInput = generatorDisplay.children('#user-input');
+  function showError() {
+    $('#user-input').addClass('error');
+  }
 
-    //set up bindings on #user-input text box
-    userInput.val("");
-    userInput.bind("enterKey", generateSubmitFn);
-    userInput.keyup(function(e) {
-      if(e.keyCode === 13) {
-        $(this).trigger("enterKey");
-      }
-    });
+  function showHashtagDisplay() {
+    var hashtagElement = $('#hashtag');
+    var button = $('#main-btn');
+    var input = $('#user-input');
+    var myConfetti = $('#confetti');
 
+    //restore to default state
+    input.removeClass('error');
     clearTimeout(confettiTimerID);
-    generatorDisplay.children('#generate-btn').click(generateSubmitFn);
-
-    //remove hashtag-container from dom, but keep events that were previously bound to it or its children
-    hashtagDisplay = $('#hashtag-container').detach();
-
-    //reset text box contents to empty string before display
-    $('body > div.wrapper > div.wrapper--generator').append(generatorDisplay);
-    userInput.focus();
-  }
-
-  function generateSubmitFn() {
+    myConfetti.css('opacity', 1);
     flashScreen();
-    renderHashtagDisplay();
+
     window.confetti.start();
-    $('#confetti').show();
+    myConfetti.show();
 
     confettiTimerID = setTimeout(function() {
-      $('#confetti').hide();
-      window.confetti.stop();
+      myConfetti.animate({
+        opacity: 0
+      }, 1000, function() {
+        myConfetti.hide();
+        window.confetti.stop();
+      });
     }, 4000);
+
+    if (button.prop('value') == 'Generate') {
+      button.prop('value', 'Try again?');
+      input.css('visibility', 'hidden');
+
+      $('#hashtag').text(generateHashtag(input.val()));
+      hashtagElement.css('visibility', 'visible');
+    } else {
+      myConfetti.hide();
+      window.confetti.stop();
+
+      button.prop('value', 'Generate');
+      input.css('visibility', 'visible');
+      hashtagElement.css('visibility', 'hidden');
+      input.val('');
+    };
   }
 
   $(document).ready(function() {
-    $('#user-input').bind("enterKey", generateSubmitFn);
+    var input = $('#user-input');
 
-    $('#user-input').keyup(function(e) {
+    input.val('');
+    input.bind('enterKey', runAction);
+    input.keydown(function(e) {
       if(e.keyCode === 13) {
-        $(this).trigger("enterKey");
+        $(this).trigger('enterKey');
       }
     });
 
-    $('#generate-btn').click(generateSubmitFn);
+    $('#main-btn').click(runAction);
   });
 })(window);
