@@ -63,11 +63,15 @@ $(window).scroll(function() {
   }
 
   function runAction() {
-    $('#user-input').val() ? showHashtagDisplay() : showError();
+    $('#user-input').val() ? showHashtagDisplay() : flashError();
   }
 
-  function showError() {
+  function flashError() {
     $('#user-input').addClass('error');
+
+    setTimeout(function() {
+      $('#user-input').removeClass('error');
+    }, 250);
   }
 
   function showHashtagDisplay() {
@@ -94,7 +98,7 @@ $(window).scroll(function() {
       });
     }, 4000);
 
-    if (button.prop('value') == 'Generate') {
+    if(button.prop('value') == 'Generate') {
       button.prop('value', 'Try again?');
       input.css('visibility', 'hidden');
 
