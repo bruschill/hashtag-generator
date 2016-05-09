@@ -206,12 +206,6 @@ footer {
   text-decoration: none;
 }
 
-/* container div that replaces input-wrapper. */
-/* contains #hashtag and #try-again-link as children. */
-#hashtag-container {
-  margin-top: 9.6rem;
-}
-
 /* element responsible for displaying the actual hashtag */
 #hashtag {
   font-size: 3em;
