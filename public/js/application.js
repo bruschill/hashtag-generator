@@ -2,11 +2,6 @@ $(window).scroll(function() {
   var wScroll = $(this).scrollTop();
   var genHeight = $('.wrapper--generator').outerHeight();
 
-  //parallax scroll for top section
-  if (wScroll < genHeight) {
-    $('.inner').css({ 'transform': 'translateY('+ wScroll/8 +'%)' });
-  }
-
   //animate quote boxes in when scroll reaches certain point
   var scrollPosition = genHeight == 492 ? 220 : 170;
 
