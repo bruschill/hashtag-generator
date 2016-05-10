@@ -1,72 +1,77 @@
-$(window).scroll(function() {
-  var wScroll = $(this).scrollTop();
-  var genHeight = $('.wrapper--generator').outerHeight();
-
-  //animate quote boxes in when scroll reaches certain point
-  var scrollPosition = genHeight == 492 ? 220 : 170;
-
-  $('.quote-box').each(function() {
-
-    if (wScroll >= scrollPosition) {
-      $(this).addClass('pop-down');
-    }
-
-    scrollPosition = scrollPosition + 270;
-  });
-});
-
 (function(window) {
-  var hashtagDisplay, generatorDisplay, confettiTimerID;
+  var confettiTimerID;
+
+  function animateQuoteBoxes() {
+    var wScroll = $(this).scrollTop();
+    var genHeight = $('.wrapper--generator').outerHeight();
+
+    //animate quote boxes in when scroll reaches certain point
+    var scrollPosition = genHeight == 492 ? 220 : 170;
+
+    $('.quote-box').each(function() {
+      if(wScroll >= scrollPosition) {
+        $(this).addClass('pop-down');
+      }
+
+      scrollPosition = scrollPosition + 270;
+    });
+  }
+
+  function animateConfettiCanvas(confettiCanvas) {
+    confettiCanvas.animate({
+      opacity: 0
+    }, 1000, function() {
+      confettiCanvas.hide();
+      window.confetti.stop();
+    });
+  }
 
   function flashScreen() {
-    $('body').addClass('fade-out');
+    var body = $('body');
+
+    body.addClass('fade-out');
 
     setTimeout(function() {
-      $('body').removeClass('fade-out');
+      body.removeClass('fade-out');
     }, 500);
   }
 
-  function generateHashtag(text) {
-    //make sure textToConvert is a non-empty string
-    if(text) {
-      var textToConvert = text;
+  function flashError() {
+    var input = $('#user-input');
 
-      var splitTextToConvert, capitalCamelCasedString;
+    input.addClass('error');
+
+    setTimeout(function() {
+      input.removeClass('error');
+    }, 250);
+  }
+
+  function generateHashtag(text) {
+    //make sure text is a non-empty string
+    if(!!text) {
+      var splitTextToConvert;
       var capitalizedWords = [];
 
-      //strip any #'s if there happen to be any
-      textToConvert = textToConvert.replace(/#/g,  '');
+      //strip any #'s if there happen to be any, then split
+      //space-delimited string into a collection of individual words
+      splitTextToConvert = text.replace(/#/g, '').split(' ');
 
-      //split space-delimited string into a collection of individual words
-      splitTextToConvert = textToConvert.split(' ');
       //iterate through each element (word), capitalize the first character,
       //then push it on to end of capitalizedWords array
-      for (var i = 0; i < splitTextToConvert.length; i++) {
+      for(var i = 0; i < splitTextToConvert.length; i++) {
         var word = splitTextToConvert[i];
 
         word = word.substr(0, 1).toUpperCase() + word.substring(1).toLowerCase();
         capitalizedWords.push(word);
       }
 
-      //turn collection of capitalized words into a single string
-      capitalCamelCasedString = capitalizedWords.join('');
-
-      //prepend an octothorpe to capitalCamelCasedString and return it
-      var finalHashtag = "#" + capitalCamelCasedString;
-      return finalHashtag;
+      //prepend an octothorpe to the result of joined capitalizedWords array
+      return "#" + capitalizedWords.join('');
     }
   }
 
   function runAction() {
     $('#user-input').val() ? showHashtagDisplay() : flashError();
-  }
-
-  function flashError() {
-    $('#user-input').addClass('error');
-
-    setTimeout(function() {
-      $('#user-input').removeClass('error');
-    }, 250);
   }
 
   function showHashtagDisplay() {
@@ -76,7 +81,6 @@ $(window).scroll(function() {
     var myConfetti = $('#confetti');
 
     //restore to default state
-    input.removeClass('error');
     clearTimeout(confettiTimerID);
     myConfetti.css('opacity', 1);
     flashScreen();
@@ -85,15 +89,10 @@ $(window).scroll(function() {
     myConfetti.show();
 
     confettiTimerID = setTimeout(function() {
-      myConfetti.animate({
-        opacity: 0
-      }, 1000, function() {
-        myConfetti.hide();
-        window.confetti.stop();
-      });
+      animateConfettiCanvas(myConfetti);
     }, 4000);
 
-    if(button.prop('value') == 'Generate') {
+    if(button.prop('value') === 'Generate') {
       button.prop('value', 'Try again?');
       input.css('visibility', 'hidden');
 
@@ -123,5 +122,7 @@ $(window).scroll(function() {
     });
 
     $('#main-btn').click(runAction);
+
+    $(window).scroll(animateQuoteBoxes);
   });
 })(window);
