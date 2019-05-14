@@ -1,3 +1,5 @@
+### No longer maintained.
+
 # hashtag-generator
 
 ### Installation
